@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmation d'enregistrement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 1rem;
+      padding: 1rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 1.8rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    .intervention {
+      padding: 0.5rem;
+      border-left: 4px solid #3498db;
+      background: #ecf6fd;
+      margin-bottom: 0.5rem;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Enregistrement confirmé ✅</h1>
+    <div id="details"></div>
+  </div>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem('lastSubmission'));
+
+    if (!data) {
+      document.getElementById('details').innerHTML = '<p>Aucune donnée trouvée.</p>';
+    } else {
+      const container = document.getElementById('details');
+      container.innerHTML = `
+        <div class="field"><strong>Nom :</strong> ${data.nom}</div>
+        <div class="field"><strong>Prénom :</strong> ${data.prenom}</div>
+        <div class="field"><strong>Mois :</strong> ${data.mois}</div>
+        <div class="field"><strong>Interventions :</strong></div>
+        ${data.interventions.map(i => `
+          <div class="intervention">
+            📅 <strong>Jour :</strong> ${i.jour} <br>
+            👤 <strong>Client :</strong> ${i.client}
+          </div>
+        `).join('')}
+      `;
+    }
+  </script>
+</body>
+</html>

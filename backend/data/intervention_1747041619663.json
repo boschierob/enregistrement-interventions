@@ -1,0 +1,16 @@
+{
+  "nom": "Robert",
+  "prenom": "Rob",
+  "mois": "Novembre",
+  "dateJour": "2025-05-05",
+  "interventions": [
+    {
+      "jour": "2025-05-05",
+      "client": "pollet"
+    },
+    {
+      "jour": "2025-05-11",
+      "client": "dupuis"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'Enregistrement</title>
+    <link rel="stylesheet" href="style.css"> <!-- Lien vers ton fichier CSS -->
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Enregistrement des Heures Travaillées</h1>
+
+        <form id="hoursForm">
+            <!-- Nom et Prénom -->
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" required>
+
+            <!-- Mois -->
+            <label for="mois">Mois :</label>
+            <select id="mois" name="mois" required>
+                <option value="Janvier">Janvier</option>
+                <option value="Février">Février</option>
+                <option value="Mars">Mars</option>
+                <option value="Avril">Avril</option>
+                <option value="Mai">Mai</option>
+                <option value="Juin">Juin</option>
+                <option value="Juillet">Juillet</option>
+                <option value="Août">Août</option>
+                <option value="Septembre">Septembre</option>
+                <option value="Octobre">Octobre</option>
+                <option value="Novembre">Novembre</option>
+                <option value="Décembre">Décembre</option>
+            </select>
+
+            <!-- Date du jour -->
+            <label for="date_du_jour">Date du jour :</label>
+            <input type="date" id="date_du_jour" name="date_du_jour" readonly>
+
+            <!-- Ajouter des interventions dynamiques -->
+            <div id="interventions">
+                <!-- Intervention will be added here -->
+            </div>
+
+            <button type="button" id="addIntervention">+ Ajouter une intervention</button>
+
+            <!-- Bouton Soumettre -->
+            <button type="submit">Soumettre</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

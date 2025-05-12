@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Enregistrement des heures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        .intervention {
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            padding: 1rem;
+        }
+
+        button {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Formulaire d'enregistrement des heures</h1>
+
+    <form id="hoursForm">
+        <label>Nom : <input type="text" name="nom" required></label><br><br>
+        <label>Prénom : <input type="text" name="prenom" required></label><br><br>
+        <label>Mois concerné :
+            <input type="month" name="mois" required>
+        </label><br><br>
+
+        <h3>Interventions</h3>
+        <div id="interventions"></div>
+
+        <button type="button" onclick="addIntervention()">+ Ajouter une intervention</button><br><br>
+
+        <button type="submit">Soumettre</button>
+    </form>
+
+    <script>
+        const interventionsContainer = document.getElementById('interventions');
+
+        function addIntervention() {
+            const div = document.createElement('div');
+            div.className = 'intervention';
+            div.innerHTML = `
+        <label>Jour : <input type="date" name="jour[]" required></label><br>
+        <label>Client : <input type="text" name="client[]" required></label>
+      `;
+            interventionsContainer.appendChild(div);
+        }
+
+        document.getElementById('hoursForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const nom = form.nom.value;
+            const prenom = form.prenom.value;
+            const mois = form.mois.value;
+
+            const jours = Array.from(form.querySelectorAll('input[name="jour[]"]')).map(input => input.value);
+            const clients = Array.from(form.querySelectorAll('input[name="client[]"]')).map(input => input.value);
+
+            const interventions = jours.map((jour, index) => ({
+                jour,
+                client: clients[index]
+            }));
+
+            const payload = {
+                nom,
+                prenom,
+                mois,
+                interventions
+            };
+
+            // ... à l'intérieur du eventListener 'submit'
+            try {
+                const response = await fetch('http://localhost:3001/api/interventions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('Erreur lors de l\'envoi');
+
+                // Stocker les données localement pour la page de confirmation
+                localStorage.setItem('lastSubmission', JSON.stringify(payload));
+
+                // Rediriger vers la page de confirmation
+                window.location.href = 'confirmation.html';
+
+            } catch (err) {
+                alert('Erreur : ' + err.message);
+            }
+
+        });
+    </script>
+</body>
+
+</html>

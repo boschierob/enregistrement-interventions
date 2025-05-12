@@ -1,0 +1,137 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    display: flexbox;
+  }
+
+  h1 {
+    text-align: center;
+    color: #3498db;
+    margin-bottom: 30px;
+  }
+  
+  /* Form Container */
+  form {
+    background-color: white;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  select:focus {
+    border-color: #3498db;
+    outline: none;
+    background-color: #fff;
+  }
+  
+  button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  /* Dynamic Intervention Fields */
+  #interventions {
+    margin-bottom: 20px;
+  }
+  
+  .intervention {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .intervention input {
+    width: calc(50% - 10px);
+    margin-right: 10px;
+  }
+  
+  .intervention input:last-child {
+    margin-right: 0;
+  }
+  
+  .intervention button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .intervention button:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    form {
+      padding: 15px;
+      width: 90%;
+    }
+  
+    .intervention input {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+  

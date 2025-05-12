@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Enregistrement des heures</title>
+  <link rel="stylesheet" href="style.css"> <!-- Ton fichier CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <form id="hoursForm">
+    <h1>Formulaire d'enregistrement des interventions</h1>
+
+    <label>Nom : <input type="text" name="nom" required></label><br><br>
+    <label>Prénom : <input type="text" name="prenom" required></label><br><br>
+
+    <label>Date d'enregistrement' :
+      <input type="date" name="dateJour" id="dateJour" required readonly>
+    </label><br><br>
+
+    <div>
+      <label for="mois">Mois concerné:</label>
+      <select id="mois" name="mois" required>
+        <option value="" disabled selected>Sélectionner un mois</option>
+        <option value="Janvier">Janvier</option>
+        <option value="Février">Février</option>
+        <option value="Mars">Mars</option>
+        <option value="Avril">Avril</option>
+        <option value="Mai">Mai</option>
+        <option value="Juin">Juin</option>
+        <option value="Juillet">Juillet</option>
+        <option value="Août">Août</option>
+        <option value="Septembre">Septembre</option>
+        <option value="Octobre">Octobre</option>
+        <option value="Novembre">Novembre</option>
+        <option value="Décembre">Décembre</option>
+      </select>
+    </div>
+
+    <h3>Interventions</h3>
+    <div id="interventions"></div>
+
+    <button type="button" id="add-intervention">+ Ajouter une intervention</button><br><br>
+
+    <button type="submit">Soumettre</button>
+    <button type="reset" id="cancel-form">Annuler</button>
+  </form>
+
+  <script>
+    const interventionsContainer = document.getElementById('interventions');
+    const cancelButton = document.getElementById('cancel-form');
+    const addButton = document.getElementById('add-intervention');
+
+    function addIntervention() {
+      const div = document.createElement('div');
+      div.className = 'intervention';
+      div.style.marginBottom = '15px';
+
+      div.innerHTML = `
+        <label>Jour : <input type="date" name="jour[]" required></label><br>
+        <label>Client : <input type="text" name="client[]" required></label><br>
+        <button type="button" class="delete-intervention">x</button>
+      `;
+
+      interventionsContainer.appendChild(div);
+    }
+
+    addButton.addEventListener('click', addIntervention);
+
+    interventionsContainer.addEventListener('click', function (e) {
+      if (e.target.classList.contains('delete-intervention')) {
+        e.target.parentElement.remove();
+      }
+    });
+
+    cancelButton.addEventListener('click', () => {
+      document.getElementById('hoursForm').reset();
+      interventionsContainer.innerHTML = '';
+    });
+
+    document.getElementById('hoursForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const nom = form.nom.value;
+      const prenom = form.prenom.value;
+      const mois = form.mois.value;
+      const dateJour = form.dateJour.value;
+
+      const jours = Array.from(form.querySelectorAll('input[name="jour[]"]')).map(input => input.value);
+      const clients = Array.from(form.querySelectorAll('input[name="client[]"]')).map(input => input.value);
+
+      const interventions = jours.map((jour, index) => ({
+        jour,
+        client: clients[index]
+      }));
+
+      const payload = {
+        nom,
+        prenom,
+        mois,
+        dateJour,
+        interventions
+      };
+
+      try {
+        const response = await fetch('http://localhost:3001/api/interventions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error('Erreur lors de l\'envoi');
+
+        localStorage.setItem('lastSubmission', JSON.stringify(payload));
+        window.location.href = 'confirmation.html';
+
+      } catch (err) {
+        alert('Erreur : ' + err.message);
+      }
+    });
+
+    // Préremplir la date du jour
+    document.getElementById('dateJour').valueAsDate = new Date();
+  </script>
+</body>
+</html>

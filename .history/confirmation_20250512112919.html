@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confirmation d'enregistrement</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    .bloc {
+      background-color: #f0f0f0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    .intervention {
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="confirmation-content">
+    <h1>Vos interventions enregistrées</h1>
+    <h6>date d'enregistrement : <span id="dateJour"></span></h6>
+    <div class="bloc">
+      <p><strong>Nom :</strong> <span id="nom"></span></p>
+      <p><strong>Prénom :</strong> <span id="prenom"></span></p>
+      <p><strong>Mois :</strong> <span id="mois"></span></p>
+    </div>
+
+    <div class="bloc">
+      <h3>Interventions</h3>
+      <div id="interventions"></div>
+    </div>
+  </div>
+
+  <button onclick="downloadPDF()">Télécharger au format PDF</button>
+
+  <script>
+    // Charger les données depuis localStorage
+    const data = JSON.parse(localStorage.getItem('lastSubmission'));
+
+    if (data) {
+      document.getElementById('nom').textContent = data.nom;
+      document.getElementById('prenom').textContent = data.prenom;
+      document.getElementById('mois').textContent = data.mois;
+      document.getElementById('dateJour').textContent = data.dateJour;
+
+      const container = document.getElementById('interventions');
+      data.interventions.forEach((intervention, index) => {
+        const div = document.createElement('div');
+        div.classList.add('intervention');
+        div.innerHTML = `<strong>Jour :</strong> ${intervention.jour}<br><strong>Client :</strong> ${intervention.client}`;
+        container.appendChild(div);
+      });
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('confirmation-content');
+      html2pdf()
+        .from(element)
+        .set({
+          margin: 10,
+          filename: `interventions_${data.nom}_${data.mois}.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        })
+        .save();
+    }
+  </script>
+
+</body>
+</html>
