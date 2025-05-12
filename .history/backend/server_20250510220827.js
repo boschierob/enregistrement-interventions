@@ -3,7 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 3001  ;
+const PORT = 3001;
 
 app.use(cors()); // 👈 autorise les requêtes cross-origin
 app.use(express.json());
@@ -64,5 +64,5 @@ app.get('/api/interventions/download/:filename', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Serveur lancé sur le port ${PORT}`);
+  console.log(`✅ Serveur sur http://localhost:${PORT}`);
 });
