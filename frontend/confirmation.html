@@ -50,6 +50,7 @@
 <body>
 
   <div id="confirmation-content">
+    <button id="retourFormulaire" class="btn">Revenir au formulaire</button>
     <h1>Vos interventions enregistrées</h1>
     <h6>date d'enregistrement : <span id="dateJour"></span></h6>
     <div class="bloc">
@@ -84,7 +85,9 @@
         container.appendChild(div);
       });
     }
-
+    document.getElementById('retourFormulaire').addEventListener('click', function () {
+      window.location.href = 'index.html'; // ou le nom réel de ton fichier de formulaire
+    });
     function downloadPDF() {
       const element = document.getElementById('confirmation-content');
       html2pdf()
