@@ -25,32 +25,47 @@ if (!fs.existsSync(dataDir)) {
 }
 
 // Route POST : enregistre une intervention
-app.post('/api/interventions', (req, res) => {
-  const data = req.body;
-  const filename = `intervention_${Date.now()}.json`;
-  const filePath = path.join(dataDir, filename);
+app.post('/api/interventions', async (req, res) => {
+  const { nom, prenom, mois, interventions } = req.body;
+  
 
-  fs.writeFile(filePath, JSON.stringify(data, null, 2), (err) => {
-    if (err) {
-      console.error('Erreur d\'écriture :', err);
-      return res.status(500).json({ message: 'Erreur serveur' });
-    }
-    res.status(200).json({ message: 'Enregistrement réussi', filename });
-  });
+  try {
+    await Promise.all(interventions.map(intervention =>
+      supabase.from('interventions2').insert({
+        nom,
+        prenom,
+        mois,
+        jour: intervention.jour,
+        client: intervention.client
+      })
+    ));
+
+    res.status(200).json({ message: 'Interventions enregistrées avec succès' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de l’enregistrement dans Supabase',error });
+  }
 });
 
+
 // Route GET : liste tous les fichiers JSON disponibles
-app.get('/api/interventions/list', (req, res) => {
-  fs.readdir(dataDir, (err, files) => {
-    if (err) {
-      console.error('Erreur de lecture du dossier :', err);
-      return res.status(500).json({ message: 'Erreur serveur' });
+app.get('/interventions', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('interventions2')
+      .select('*')
+      .order('date', { ascending: false }); // optionnel : trie par date décroissante
+
+    if (error) {
+      console.error('Erreur lors de la récupération des interventions :', error);
+      return res.status(500).json({ message: 'Erreur lors de la récupération des interventions.', error });
     }
 
-    // Ne retourne que les fichiers JSON
-    const jsonFiles = files.filter(file => file.endsWith('.json'));
-    res.status(200).json({ files: jsonFiles });
-  });
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Erreur serveur :', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
 });
 
 // Route GET : télécharge un fichier spécifique
