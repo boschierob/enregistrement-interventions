@@ -1,9 +1,17 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors'); 
 const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001  ;
+
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(cors()); // 👈 autorise les requêtes cross-origin
 app.use(express.json());
